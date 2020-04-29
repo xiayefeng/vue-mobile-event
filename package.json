@@ -1,0 +1,30 @@
+{
+  "name": "vue-mobile-event",
+  "version": "1.0.0",
+  "description": "vue mobile event, such tap longTap and so on.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiayefeng/vue-mobile-event.git"
+  },
+  "keywords": [
+    "touch",
+    "event",
+    "mobile",
+    "tap",
+    "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[\u001b[3~\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DlogTap",
+    "leftSlip",
+    "rightSlip",
+    "upSlip",
+    "downSlip"
+  ],
+  "author": "xiaoyu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xiayefeng/vue-mobile-event/issues"
+  },
+  "homepage": "https://github.com/xiayefeng/vue-mobile-event#readme"
+}
