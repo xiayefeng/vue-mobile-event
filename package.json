@@ -4,6 +4,9 @@
   "description": "vue mobile event, such tap longTap and so on.",
   "main": "index.js",
   "scripts": {
+    "dev": "rollup -c --environment NODE_ENV:development",
+    "build": "rollup -c --environment NODE_ENV:production",
+    "lint": "eslint src/**",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,7 +18,7 @@
     "event",
     "mobile",
     "tap",
-    "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[\u001b[3~\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DlogTap",
+    "logTap",
     "leftSlip",
     "rightSlip",
     "upSlip",
@@ -26,5 +29,30 @@
   "bugs": {
     "url": "https://github.com/xiayefeng/vue-mobile-event/issues"
   },
-  "homepage": "https://github.com/xiayefeng/vue-mobile-event#readme"
+  "homepage": "https://github.com/xiayefeng/vue-mobile-event#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "lint-staged": "^10.2.0",
+    "rollup": "^2.7.3",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-eslint": "^7.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-terser": "^5.3.0",
+    "rollup-plugin-uglify": "^6.0.4"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  }
 }
