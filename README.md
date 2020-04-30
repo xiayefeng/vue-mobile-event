@@ -1,13 +1,18 @@
 # vue-mobile-event
  vue mobile event
 
- ## install
+## install
+npm
+```
+npm i vue-mobile-event -S
+```
 
+yarn
  ```
  yarn add vue-mobile-event
  ```
 
- ## use example
+## use example
 
  ``` js
 //  main.js
