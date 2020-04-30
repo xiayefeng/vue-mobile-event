@@ -7,6 +7,7 @@
     "dev": "rollup -c --environment NODE_ENV:development",
     "build": "rollup -c --environment NODE_ENV:production",
     "lint": "eslint src/**",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w -r 0",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -35,6 +36,7 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "babel-eslint": "^10.1.0",
+    "cz-conventional-changelog": "^3.1.0",
     "eslint": "^6.8.0",
     "lint-staged": "^10.2.0",
     "rollup": "^2.7.3",
@@ -44,7 +46,8 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-terser": "^5.3.0",
-    "rollup-plugin-uglify": "^6.0.4"
+    "rollup-plugin-uglify": "^6.0.4",
+    "validate-commit-msg": "^2.14.0"
   },
   "lint-staged": {
     "*.js": [
@@ -54,5 +57,13 @@
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "ghooks": {
+      "commit-msg": "./validate-commit-msg.js"
+    }
   }
 }
