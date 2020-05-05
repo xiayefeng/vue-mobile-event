@@ -25,6 +25,7 @@ export default class MyEvent {
   }
   tap (handler) {
     let startTime, endTime
+    let that = this
     let touchFn = function (e) {
       e.preventDefault()
       switch (e.type) {
@@ -33,9 +34,9 @@ export default class MyEvent {
           break
         case 'touchend':
           endTime = new Date().getTime()
-          if (endTime - startTime < this.tapTime) {
-            if (!this.tapLastTime || endTime - this.tapLastTime > 600) { // 防止重复提交
-              this.tapLastTime = +new Date()
+          if (endTime - startTime < that.tapTime) {
+            if (!that.tapLastTime || endTime - that.tapLastTime > 600) { // 防止重复提交
+              that.tapLastTime = +new Date()
               handler.call(this, e)
             }
           }
@@ -58,6 +59,7 @@ export default class MyEvent {
   longTap (startHandle, endHandle) {
     let startTime, endTime, timerId, startX, startY, endY
     let isLongPress = false
+    let that = this
     let touchFn = function (e) {
       e.preventDefault()
       let isMove = Math.abs(e.changedTouches[0].clientX - startX) > 20 || Math.abs(e.changedTouches[0].clientY - startY) > 20
@@ -70,7 +72,7 @@ export default class MyEvent {
             startHandle.call(this, e)
             isLongPress = true
             timerId = null
-          }, this.logTapTime)
+          }, that.logTapTime)
           break
         case 'touchmove':
           
@@ -81,7 +83,7 @@ export default class MyEvent {
               startHandle.call(this, e)
               isLongPress = true
               timerId = null
-            }, this.logTapTime)
+            }, that.logTapTime)
           }
           break
         case 'touchend':
@@ -90,7 +92,7 @@ export default class MyEvent {
           // console.log(endY, startY)
           // console.log('Y:' + (startY - endY))
           // console.log('time:' + (endTime - startTime))
-          if (endTime - startTime < this.logTapTime) {
+          if (endTime - startTime < that.logTapTime) {
             timerId && clearTimeout(timerId)
           } else if (endHandle && (startY - endY < 30)) {
             endHandle.call(this, e)
