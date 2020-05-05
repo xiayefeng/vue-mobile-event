@@ -3,6 +3,8 @@
 export default class MyEvent {
   constructor (props) {
     // super(props)
+    this.tapTime = props.tapTime || 200
+    this.logTapTime = props.logTapTime || 500
     let select = props.select
     if (typeof select === 'string') {
       this.ele = document.querySelector(select)
@@ -31,7 +33,7 @@ export default class MyEvent {
           break
         case 'touchend':
           endTime = new Date().getTime()
-          if (endTime - startTime < 200) {
+          if (endTime - startTime < this.tapTime) {
             if (!this.tapLastTime || endTime - this.tapLastTime > 600) { // 防止重复提交
               this.tapLastTime = +new Date()
               handler.call(this, e)
@@ -68,7 +70,7 @@ export default class MyEvent {
             startHandle.call(this, e)
             isLongPress = true
             timerId = null
-          }, 500)
+          }, this.logTapTime)
           break
         case 'touchmove':
           
@@ -79,7 +81,7 @@ export default class MyEvent {
               startHandle.call(this, e)
               isLongPress = true
               timerId = null
-            }, 500)
+            }, this.logTapTime)
           }
           break
         case 'touchend':
@@ -88,7 +90,7 @@ export default class MyEvent {
           // console.log(endY, startY)
           // console.log('Y:' + (startY - endY))
           // console.log('time:' + (endTime - startTime))
-          if (endTime - startTime < 500) {
+          if (endTime - startTime < this.logTapTime) {
             timerId && clearTimeout(timerId)
           } else if (endHandle && (startY - endY < 30)) {
             endHandle.call(this, e)
