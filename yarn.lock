@@ -1137,9 +1137,9 @@ callsites@^3.0.0:
   integrity sha1-s2MKvYlDQy9Us/BRkjjjPNffL3M=
 
 caniuse-lite@^1.0.30001043:
-  version "1.0.30001050"
-  resolved "https://registry.npm.taobao.org/caniuse-lite/download/caniuse-lite-1.0.30001050.tgz#11218af4b6b85dc1089536f31e10e3181e849e71"
-  integrity sha1-ESGK9La4XcEIlTbzHhDjGB6EnnE=
+  version "1.0.30001051"
+  resolved "https://registry.npm.taobao.org/caniuse-lite/download/caniuse-lite-1.0.30001051.tgz#8e944abf9c796bc7ea0bec3c3688a250561fc9ac"
+  integrity sha1-jpRKv5x5a8fqC+w8NoiiUFYfyaw=
 
 chalk@2.4.2, chalk@^2.0.0, chalk@^2.1.0, chalk@^2.4.1, chalk@^2.4.2:
   version "2.4.2"
