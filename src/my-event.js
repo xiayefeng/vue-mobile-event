@@ -176,7 +176,7 @@ export default class MyEvent {
   upSlip (handler, sort) {
     let startX, startY, endX, endY
     let touchFn = function (e) {
-      console.log(e.type)
+      // console.log(e.type)
       e.preventDefault()
       switch (e.type) {
         case 'touchstart':
@@ -218,8 +218,8 @@ export default class MyEvent {
         case 'touchend':
           endX = e.changedTouches[0].clientX
           endY = e.changedTouches[0].clientY
-          console.log('X:' + Math.abs(startX - endX))
-          console.log('Y:' + (endY - startY))
+          // console.log('X:' + Math.abs(startX - endX))
+          // console.log('Y:' + (endY - startY))
           if (Math.abs(startX - endX) < 30 && endY - startY > 50) {
             handler.call(this, e)
           }

@@ -8,7 +8,8 @@ npm i vue-mobile-event -S
 ```
 
 yarn
- ```
+
+```
  yarn add vue-mobile-event
  ```
 
@@ -31,6 +32,10 @@ yarn
   <!-- 长按事件 -->
   <div v-event:longTap="longTapEvent" />
 
+  <!-- 长按带结束回调 -->
+
+  <div v-event:longTap="{startHandle, endHandle}"></div>
+
   <!-- 左划事件 -->
   <div v-event:leftSlip="leftSlipEvent" />
 
@@ -43,4 +48,23 @@ yarn
   <!-- 下滑事件 -->
   <div v-event:downSlip="downSlipEvent" />
 </template>
+<script>
+export default {
+  methods: {
+    tapEvent(e){
+    },
+    longTapEvent(e){
+    },
+    startHandle(e) {
+    },
+    endHandle(e){
+    }
+    leftSlipEvent(e){
+    },
+    rightSlipEvent(e){},
+    upSlipEvent(e){},
+    downSlipEvent(e){}
+  }
+}
+</script>
  ```
