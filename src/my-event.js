@@ -49,7 +49,6 @@ export default class MyEvent extends Subject {
     let observer = () => {
       this.ele.removeEventListener('touchstart', touchFn)
       this.ele.removeEventListener('touchend', touchFn)
-      console.log('remove tap event')
     }
     this.add(new Observer({ cb: observer.bind(this) }))
   }
