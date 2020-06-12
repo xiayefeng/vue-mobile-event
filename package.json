@@ -1,6 +1,6 @@
 {
   "name": "vue-mobile-event",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "vue mobile event, such tap longTap and so on.",
   "main": "index.js",
   "scripts": {
