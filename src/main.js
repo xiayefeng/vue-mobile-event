@@ -1,9 +1,30 @@
-import MyEvent from './my-event'
+import MyEvent, {strHash, domToString} from './my-event'
+const cache = {}
 const vuePhoneEvent = {
   install(Vue){
     Vue.directive('event', {
-      inserted: function (el, binding) {
-        let myEvent = new MyEvent({ select: el })
+      inserted: function (el, binding, vNode) {
+        let myEvent
+        let hashText = strHash(domToString(el))
+        if (!cache[hashText]) {
+          cache[hashText] = new MyEvent({
+            select: el,
+            destory () {
+              return new Promise((resolve, reject) => {
+                vNode.context.$once('hook:beforeDestroy',
+                function () {
+                  delete cache[hashText]
+                  hashText = null
+                  return resolve()
+                })
+                vNode.context.$on('error', function (err) {
+                  return reject(err)
+                })
+              })
+            }
+          })
+        }
+        myEvent = cache[hashText]
         if (!myEvent[binding.arg]) {
           throw new Error(`no such ${binding.arg} evnet type`)
         }

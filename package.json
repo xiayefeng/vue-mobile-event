@@ -1,6 +1,6 @@
 {
   "name": "vue-mobile-event",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "vue mobile event, such tap longTap and so on.",
   "main": "index.js",
   "scripts": {
@@ -65,5 +65,6 @@
     "ghooks": {
       "commit-msg": "./validate-commit-msg.js"
     }
-  }
+  },
+  "dependencies": {}
 }
