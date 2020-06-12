@@ -261,10 +261,5 @@ export function strHash (input) {
 }
 
 export function domToString (node) {
-  let tmpNode = document.createElement('div')
-  let newNode = node.cloneNode(true)
-  tmpNode.appendChild(newNode)
-  let str = tmpNode.innerHTML
-  tmpNode = newNode = null // 解除引用，以便于垃圾回收
-  return str
+  return node.outerHTML
 }
