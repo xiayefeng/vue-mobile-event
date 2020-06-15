@@ -3,7 +3,10 @@ export default class MyEvent extends Subject {
   constructor (props) {
     super(props)
     this.tapTime = props.tapTime || 200
-    this.logTapTime = props.logTapTime || 500
+    this.logTapTime = props.logTapTime || 400
+    this.desX = props.desX || 30
+    this.desY = props.desY || 30
+    this.minMoveDes = props.minMoveDes || 50
     let select = props.select
     if (typeof select === 'string') {
       this.ele = document.querySelector(select)
@@ -59,7 +62,7 @@ export default class MyEvent extends Subject {
     let that = this
     let touchFn = function (e) {
       e.preventDefault()
-      let isMove = Math.abs(e.changedTouches[0].clientX - startX) > 20 || Math.abs(e.changedTouches[0].clientY - startY) > 20
+      let isMove = Math.abs(e.changedTouches[0].clientX - startX) > that.desX || Math.abs(e.changedTouches[0].clientY - startY) > that.desY
       switch (e.type) {
         case 'touchstart':
           startTime = new Date().getTime()
@@ -89,7 +92,7 @@ export default class MyEvent extends Subject {
           // console.log(endY, startY)
           if (endTime - startTime < that.logTapTime) {
             timerId && clearTimeout(timerId)
-          } else if (endHandle && (startY - endY < 30)) {
+          } else if (endHandle && (startY - endY < that.desY)) {
             endHandle.call(this, e)
           }
           // clearTimeout(timerId)
@@ -113,6 +116,7 @@ export default class MyEvent extends Subject {
 
   leftSlip (handler) {
     let startX, startY, endX, endY
+    let that = this
     let touchFn = function (e) {
       // console.log(e.type)
       e.preventDefault()
@@ -124,7 +128,7 @@ export default class MyEvent extends Subject {
         case 'touchend':
           endX = e.changedTouches[0].clientX
           endY = e.changedTouches[0].clientY
-          if (Math.abs(startY - endY) < 30 && startX - endX > 50) {
+          if (Math.abs(startY - endY) < that.desY && startX - endX > that.minMoveDes) {
             handler.call(this, e)
           }
           break
@@ -144,6 +148,7 @@ export default class MyEvent extends Subject {
 
   rightSlip (handler) {
     let startX, startY, endX, endY
+    let that = this
     let touchFn = function (e) {
       e.preventDefault()
       switch (e.type) {
@@ -154,7 +159,7 @@ export default class MyEvent extends Subject {
         case 'touchend':
           endX = e.changedTouches[0].clientX
           endY = e.changedTouches[0].clientY
-          if (Math.abs(startY - endY) < 30 && endX - startX > 50) {
+          if (Math.abs(startY - endY) < that.desY && endX - startX > that.minMoveDes) {
             handler.call(this, e)
           }
           break
@@ -172,8 +177,9 @@ export default class MyEvent extends Subject {
     this.add(new Observer({ cb: observer.bind(this) }))
   }
 
-  upSlip (handler, sort) {
+  upSlip (handler) {
     let startX, startY, endX, endY
+    let that = this
     let touchFn = function (e) {
       // console.log(e.type)
       e.preventDefault()
@@ -187,7 +193,7 @@ export default class MyEvent extends Subject {
           endY = e.changedTouches[0].clientY
           /* console.log('X:' + Math.abs(startX - endX))
           console.log('Y:' + (startY - endY)) */
-          if ((Math.abs(startX - endX) < 40 && startY - endY > 50) || (sort && startY - endY > 60)) {
+          if ((Math.abs(startX - endX) < that.desX && startY - endY > that.minMoveDes)) {
             handler.call(this, e)
           }
           break
@@ -206,8 +212,9 @@ export default class MyEvent extends Subject {
   }
   downSlip (handler) {
     let startX, startY, endX, endY
+    let that = this
     let touchFn = function (e) {
-      console.log(e.type)
+      // console.log(e.type)
       e.preventDefault()
       switch (e.type) {
         case 'touchstart':
@@ -219,7 +226,7 @@ export default class MyEvent extends Subject {
           endY = e.changedTouches[0].clientY
           // console.log('X:' + Math.abs(startX - endX))
           // console.log('Y:' + (endY - startY))
-          if (Math.abs(startX - endX) < 30 && endY - startY > 50) {
+          if (Math.abs(startX - endX) < that.desX && endY - startY > that.minMoveDes) {
             handler.call(this, e)
           }
           break
