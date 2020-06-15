@@ -9,7 +9,8 @@ export default {
   input: 'src/main.js',
   output: {
     format: 'cjs',
-    file: 'dist/main.js'
+    file: 'dist/main.js',
+    exports: 'named'
   },
   plugins: [
     resolve(),

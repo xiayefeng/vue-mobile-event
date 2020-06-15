@@ -16,7 +16,7 @@ yarn
 ## use example
 
  ``` js
-//  main.js
+//  main.js 全局注册
   import Vue from 'vue'
   import VueMobileEvent from 'vue-mobile-event'
   Vue.use(VueMobileEvent)
@@ -68,3 +68,14 @@ export default {
 }
 </script>
  ```
+
+``` js 
+// 局部注册
+import {inserted} from 'vue-mobile-event'
+
+directives: {
+  event: { // 可自定义
+    inserted
+  }
+}
+```
