@@ -1,33 +1,32 @@
 import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import babel from 'rollup-plugin-babel';
+// import commonjs from 'rollup-plugin-commonjs';
+// import babel from 'rollup-plugin-babel';
 import {eslint} from 'rollup-plugin-eslint';
 import replace from 'rollup-plugin-replace';
-import {uglify} from 'rollup-plugin-uglify';
+// import {uglify} from 'rollup-plugin-uglify';
 
 export default {
   input: 'src/main.js',
   output: {
-    format: 'cjs',
-    file: 'dist/main.js',
-    exports: 'named'
+    format: 'esm',
+    file: 'dist/main.js'
   },
   plugins: [
     resolve(),
-    commonjs(),
+    // commonjs(),
     eslint({
       exclude: [
         'src/styles/**',
       ]
     }),
-    babel({
+    /* babel({
       exclude: 'node_modules/**',
-    }),
+    }), */
     replace({
       exclude: 'node_modules/**',
       ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
-    (process.env.NODE_ENV === 'production' && uglify()),
+    // (process.env.NODE_ENV === 'production' && uglify()),
   ],
   external: []
 };

@@ -1,1 +1,345 @@
-"use strict";function _typeof(e){return(_typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function _classCallCheck(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function _defineProperties(e,t){for(var n=0;n<t.length;n++){var o=t[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}function _createClass(e,t,n){return t&&_defineProperties(e.prototype,t),n&&_defineProperties(e,n),e}function _inherits(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&_setPrototypeOf(e,t)}function _getPrototypeOf(e){return(_getPrototypeOf=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function _setPrototypeOf(e,t){return(_setPrototypeOf=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function _isNativeReflectConstruct(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],function(){})),!0}catch(e){return!1}}function _assertThisInitialized(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function _possibleConstructorReturn(e,t){return!t||"object"!=typeof t&&"function"!=typeof t?_assertThisInitialized(e):t}function _createSuper(o){return function(){var e,t=_getPrototypeOf(o);if(_isNativeReflectConstruct()){var n=_getPrototypeOf(this).constructor;e=Reflect.construct(t,arguments,n)}else e=t.apply(this,arguments);return _possibleConstructorReturn(this,e)}}Object.defineProperty(exports,"__esModule",{value:!0});var Subject=function(){function e(){_classCallCheck(this,e),this.Observer=[]}return _createClass(e,[{key:"add",value:function(e){this.Observer.push(e)}},{key:"remove",value:function(t){this.Observer.filter(function(e){return e===t})}},{key:"notify",value:function(){this.Observer.forEach(function(e){e.update()})}}]),e}(),Observer=function(){function t(e){_classCallCheck(this,t),this.props=e}return _createClass(t,[{key:"update",value:function(){"function"==typeof this.props.cb&&this.props.cb()}}]),t}(),MyEvent=function(){_inherits(r,Subject);var o=_createSuper(r);function r(e){var t;_classCallCheck(this,r),(t=o.call(this,e)).tapTime=e.tapTime||200,t.logTapTime=e.logTapTime||400,t.desX=e.desX||30,t.desY=e.desY||30,t.minMoveDes=e.minMoveDes||50;var n=e.select;if("string"==typeof n)t.ele=document.querySelector(n);else{if(!(n instanceof HTMLElement&&1===n.nodeType))throw new TypeError("props of select must be string or HTMLElement");t.ele=n}return t.tapLastTime=null,e.destory&&"function"==typeof e.destory&&e.destory().then(function(){t.notify()}).catch(function(e){console.log(e)}),t}return _createClass(r,[{key:"tap",value:function(t){function e(e){switch(e.preventDefault(),e.type){case"touchstart":n=(new Date).getTime();break;case"touchend":(o=(new Date).getTime())-n<c.tapTime&&(!c.tapLastTime||600<o-c.tapLastTime)&&(c.tapLastTime=+new Date,t.call(this,e));break;default:n=(new Date).getTime()}}var n,o,r=this,c=this;this.ele.addEventListener("touchstart",e),this.ele.addEventListener("touchend",e);this.add(new Observer({cb:function(){r.ele.removeEventListener("touchstart",e),r.ele.removeEventListener("touchend",e)}.bind(this)}))}},{key:"longTap",value:function(o,r){function e(e){var t=this;e.preventDefault();var n=Math.abs(e.changedTouches[0].clientX-a)>f.desX||Math.abs(e.changedTouches[0].clientY-u)>f.desY;switch(e.type){case"touchstart":c=(new Date).getTime(),a=e.changedTouches[0].clientX,u=e.changedTouches[0].clientY,s=setTimeout(function(){o.call(t,e),h=!0,s=null},f.logTapTime);break;case"touchmove":c=(new Date).getTime(),n&&!h&&(s&&clearTimeout(s),s=setTimeout(function(){o.call(t,e),h=!0,s=null},f.logTapTime));break;case"touchend":i=(new Date).getTime(),l=e.changedTouches[0].clientY,i-c<f.logTapTime?s&&clearTimeout(s):r&&u-l<f.desY&&r.call(this,e);break;default:clearTimeout(s)}}var c,i,s,a,u,l,t=this,h=!1,f=this;this.ele.addEventListener("touchstart",e),this.ele.addEventListener("touchmove",e),this.ele.addEventListener("touchend",e);this.add(new Observer({cb:function(){t.ele.removeEventListener("touchstart",e),t.ele.removeEventListener("touchmove",e),t.ele.removeEventListener("touchend",e)}.bind(this)}))}},{key:"leftSlip",value:function(t){function e(e){switch(e.preventDefault(),e.type){case"touchstart":n=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY;break;case"touchend":r=e.changedTouches[0].clientX,c=e.changedTouches[0].clientY,Math.abs(o-c)<s.desY&&n-r>s.minMoveDes&&t.call(this,e)}}var n,o,r,c,i=this,s=this;this.ele.addEventListener("touchstart",e),this.ele.addEventListener("touchend",e);this.add(new Observer({cb:function(){i.ele.removeEventListener("touchstart",e),i.ele.removeEventListener("touchend",e)}.bind(this)}))}},{key:"rightSlip",value:function(t){function e(e){switch(e.preventDefault(),e.type){case"touchstart":n=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY;break;case"touchend":r=e.changedTouches[0].clientX,c=e.changedTouches[0].clientY,Math.abs(o-c)<s.desY&&r-n>s.minMoveDes&&t.call(this,e)}}var n,o,r,c,i=this,s=this;this.ele.addEventListener("touchstart",e),this.ele.addEventListener("touchend",e);this.add(new Observer({cb:function(){i.ele.removeEventListener("touchstart",e),i.ele.removeEventListener("touchend",e)}.bind(this)}))}},{key:"upSlip",value:function(t){function e(e){switch(e.preventDefault(),e.type){case"touchstart":n=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY;break;case"touchend":r=e.changedTouches[0].clientX,c=e.changedTouches[0].clientY,Math.abs(n-r)<s.desX&&o-c>s.minMoveDes&&t.call(this,e)}}var n,o,r,c,i=this,s=this;this.ele.addEventListener("touchstart",e),this.ele.addEventListener("touchend",e);this.add(new Observer({cb:function(){i.ele.removeEventListener("touchstart",e),i.ele.removeEventListener("touchend",e)}.bind(this)}))}},{key:"downSlip",value:function(t){function e(e){switch(e.preventDefault(),e.type){case"touchstart":n=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY;break;case"touchend":r=e.changedTouches[0].clientX,c=e.changedTouches[0].clientY,Math.abs(n-r)<s.desX&&c-o>s.minMoveDes&&t.call(this,e)}}var n,o,r,c,i=this,s=this;this.ele.addEventListener("touchstart",e),this.ele.addEventListener("touchend",e);this.add(new Observer({cb:function(){i.ele.removeEventListener("touchstart",e),i.ele.removeEventListener("touchend",e)}.bind(this)}))}}]),r}();function strHash(e){var t=5381,n=e.length-1;if("string"==typeof e)for(;-1<n;n--)t+=(t<<5)+e.charCodeAt(n);else for(;-1<n;n--)t+=(t<<5)+e[n];for(var o=2147483647&t,r="";r+="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-"[63&o],o>>=6;);return r}function domToString(e){return e.outerHTML}var cache={};function inserted(e,t,n){var o,r=strHash(domToString(e));if(cache[r]||(cache[r]=new MyEvent({select:e,destory:function(){return new Promise(function(e,t){n.context.$once("hook:beforeDestroy",function(){return delete cache[r],r=null,e()}),n.context.$on("error",function(e){return t(e)})})}})),!(o=cache[r])[t.arg])throw new Error("no such ".concat(t.arg," evnet type"));if("function"==typeof t.value)o[t.arg](t.value);else{if(!("object"===_typeof(t.value)&&t.value&&Reflect.has(t.value,"startHandle")&&Reflect.has(t.value,"endHandle")&&"function"==typeof t.value.startHandle&&"function"==typeof t.value.endHandle&&"longTap"===t.arg))throw new TypeError("expression must be function or a object, object has 'startHandle' and 'endHandle' function");o[t.arg](t.value.startHandle,t.value.endHandle)}}var vuePhoneEvent={install:function(e){e.directive("event",{inserted:inserted})}};exports.default=vuePhoneEvent,exports.inserted=inserted;
+/**
+ *  观察者模式
+ */
+
+// 定义一个主体对象
+class Subject {
+  constructor () {
+    this.Observer = [];
+  }
+
+  add (observer) {
+    this.Observer.push(observer);
+  }
+
+  remove (observer) {
+    this.Observer.filter(item => item === observer);
+  }
+
+  notify () {
+    this.Observer.forEach(item => {
+      item.update();
+    });
+  }
+}
+
+// 定义观察着对象
+class Observer {
+  constructor (props) {
+    this.props = props;
+  }
+
+  update () {
+    typeof this.props.cb === 'function' && this.props.cb();
+  }
+}
+
+class MyEvent extends Subject {
+  constructor (props) {
+    super(props);
+    this.tapTime = props.tapTime || 200;
+    this.logTapTime = props.logTapTime || 400;
+    this.desX = props.desX || 30;
+    this.desY = props.desY || 30;
+    this.minMoveDes = props.minMoveDes || 50;
+    let select = props.select;
+    if (typeof select === 'string') {
+      this.ele = document.querySelector(select);
+    } else if (select instanceof HTMLElement && select.nodeType === 1) {
+      this.ele = select;
+    } else {
+      throw new TypeError('props of select must be string or HTMLElement')
+    }
+    this.tapLastTime = null;
+    if (props.destory && typeof props.destory === 'function') {
+      props.destory().then(() => {
+        this.notify();
+      }).catch(err => {
+        console.log(err);
+      });
+    }
+  }
+  tap (handler) {
+    let startTime, endTime;
+    let that = this;
+    let touchFn = function (e) {
+      e.preventDefault();
+      switch (e.type) {
+        case 'touchstart':
+          startTime = new Date().getTime();
+          break
+        case 'touchend':
+          endTime = new Date().getTime();
+          if (endTime - startTime < that.tapTime) {
+            if (!that.tapLastTime || endTime - that.tapLastTime > 600) { // 防止重复提交
+              that.tapLastTime = +new Date();
+              handler.call(this, e);
+            }
+          }
+          break
+        default:
+          startTime = new Date().getTime();
+          break
+      }
+    };
+    this.ele.addEventListener('touchstart', touchFn);
+    this.ele.addEventListener('touchend', touchFn);
+    let observer = () => {
+      this.ele.removeEventListener('touchstart', touchFn);
+      this.ele.removeEventListener('touchend', touchFn);
+    };
+    this.add(new Observer({ cb: observer.bind(this) }));
+  }
+
+  longTap (startHandle, endHandle) {
+    let startTime, endTime, timerId, startX, startY, endY;
+    let isLongPress = false;
+    let that = this;
+    let touchFn = function (e) {
+      e.preventDefault();
+      let isMove = Math.abs(e.changedTouches[0].clientX - startX) > that.desX || Math.abs(e.changedTouches[0].clientY - startY) > that.desY;
+      switch (e.type) {
+        case 'touchstart':
+          startTime = new Date().getTime();
+          startX = e.changedTouches[0].clientX;
+          startY = e.changedTouches[0].clientY;
+          timerId = setTimeout(() => {
+            startHandle.call(this, e);
+            isLongPress = true;
+            timerId = null;
+          }, that.logTapTime);
+          break
+        case 'touchmove':
+          
+          startTime = new Date().getTime();
+          if (isMove && !isLongPress) {
+            timerId && clearTimeout(timerId);
+            timerId = setTimeout(() => {
+              startHandle.call(this, e);
+              isLongPress = true;
+              timerId = null;
+            }, that.logTapTime);
+          }
+          break
+        case 'touchend':
+          endTime = new Date().getTime();
+          endY = e.changedTouches[0].clientY;
+          // console.log(endY, startY)
+          if (endTime - startTime < that.logTapTime) {
+            timerId && clearTimeout(timerId);
+          } else if (endHandle && (startY - endY < that.desY)) {
+            endHandle.call(this, e);
+          }
+          // clearTimeout(timerId)
+          break
+        default:
+          clearTimeout(timerId);
+          break
+      }
+    };
+    this.ele.addEventListener('touchstart', touchFn);
+    this.ele.addEventListener('touchmove', touchFn);
+    this.ele.addEventListener('touchend', touchFn);
+
+    let observer = () => {
+      this.ele.removeEventListener('touchstart', touchFn);
+      this.ele.removeEventListener('touchmove', touchFn);
+      this.ele.removeEventListener('touchend', touchFn);
+    };
+    this.add(new Observer({ cb: observer.bind(this) }));
+  }
+
+  leftSlip (handler) {
+    let startX, startY, endX, endY;
+    let that = this;
+    let touchFn = function (e) {
+      // console.log(e.type)
+      e.preventDefault();
+      switch (e.type) {
+        case 'touchstart':
+          startX = e.changedTouches[0].clientX;
+          startY = e.changedTouches[0].clientY;
+          break
+        case 'touchend':
+          endX = e.changedTouches[0].clientX;
+          endY = e.changedTouches[0].clientY;
+          if (Math.abs(startY - endY) < that.desY && startX - endX > that.minMoveDes) {
+            handler.call(this, e);
+          }
+          break
+      }
+    };
+    this.ele.addEventListener('touchstart', touchFn);
+    this.ele.addEventListener('touchend', touchFn);
+
+    let observer = () => {
+      this.ele.removeEventListener('touchstart', touchFn);
+      this.ele.removeEventListener('touchend', touchFn);
+    };
+    this.add(new Observer({ cb: observer.bind(this) }));
+  }
+
+  rightSlip (handler) {
+    let startX, startY, endX, endY;
+    let that = this;
+    let touchFn = function (e) {
+      e.preventDefault();
+      switch (e.type) {
+        case 'touchstart':
+          startX = e.changedTouches[0].clientX;
+          startY = e.changedTouches[0].clientY;
+          break
+        case 'touchend':
+          endX = e.changedTouches[0].clientX;
+          endY = e.changedTouches[0].clientY;
+          if (Math.abs(startY - endY) < that.desY && endX - startX > that.minMoveDes) {
+            handler.call(this, e);
+          }
+          break
+      }
+    };
+    this.ele.addEventListener('touchstart', touchFn);
+    this.ele.addEventListener('touchend', touchFn);
+
+    let observer = () => {
+      this.ele.removeEventListener('touchstart', touchFn);
+      this.ele.removeEventListener('touchend', touchFn);
+    };
+    this.add(new Observer({ cb: observer.bind(this) }));
+  }
+
+  upSlip (handler) {
+    let startX, startY, endX, endY;
+    let that = this;
+    let touchFn = function (e) {
+      // console.log(e.type)
+      e.preventDefault();
+      switch (e.type) {
+        case 'touchstart':
+          startX = e.changedTouches[0].clientX;
+          startY = e.changedTouches[0].clientY;
+          break
+        case 'touchend':
+          endX = e.changedTouches[0].clientX;
+          endY = e.changedTouches[0].clientY;
+          /* console.log('X:' + Math.abs(startX - endX))
+          console.log('Y:' + (startY - endY)) */
+          if ((Math.abs(startX - endX) < that.desX && startY - endY > that.minMoveDes)) {
+            handler.call(this, e);
+          }
+          break
+      }
+    };
+    this.ele.addEventListener('touchstart', touchFn);
+    this.ele.addEventListener('touchend', touchFn);
+
+    let observer = () => {
+      this.ele.removeEventListener('touchstart', touchFn);
+      this.ele.removeEventListener('touchend', touchFn);
+    };
+    this.add(new Observer({ cb: observer.bind(this) }));
+  }
+  downSlip (handler) {
+    let startX, startY, endX, endY;
+    let that = this;
+    let touchFn = function (e) {
+      // console.log(e.type)
+      e.preventDefault();
+      switch (e.type) {
+        case 'touchstart':
+          startX = e.changedTouches[0].clientX;
+          startY = e.changedTouches[0].clientY;
+          break
+        case 'touchend':
+          endX = e.changedTouches[0].clientX;
+          endY = e.changedTouches[0].clientY;
+          // console.log('X:' + Math.abs(startX - endX))
+          // console.log('Y:' + (endY - startY))
+          if (Math.abs(startX - endX) < that.desX && endY - startY > that.minMoveDes) {
+            handler.call(this, e);
+          }
+          break
+      }
+    };
+    this.ele.addEventListener('touchstart', touchFn);
+    this.ele.addEventListener('touchend', touchFn);
+
+    let observer = () => {
+      this.ele.removeEventListener('touchstart', touchFn);
+      this.ele.removeEventListener('touchend', touchFn);
+    };
+    this.add(new Observer({ cb: observer.bind(this) }));
+  }
+}
+
+function strHash (input) {
+  var I64BIT_TABLE =
+ 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+  var hash = 5381;
+  var i = input.length - 1;
+
+  if (typeof input === 'string') {
+    for (; i > -1; i--) { hash += (hash << 5) + input.charCodeAt(i); }
+  } else {
+    for (; i > -1; i--) { hash += (hash << 5) + input[i]; }
+  }
+  var value = hash & 0x7FFFFFFF;
+
+  var retValue = '';
+  do {
+    retValue += I64BIT_TABLE[value & 0x3F];
+  }
+  while ((value >>= 6))
+
+  return retValue
+}
+
+function domToString (node) {
+  return node.outerHTML
+}
+
+const cache = {};
+
+function inserted (el, binding, vNode) {
+  let myEvent;
+  let hashText = strHash(domToString(el));
+  if (!cache[hashText]) {
+    cache[hashText] = new MyEvent({
+      select: el,
+      destory () {
+        return new Promise((resolve, reject) => {
+          vNode.context.$once('hook:beforeDestroy',
+          function () {
+            delete cache[hashText];
+            hashText = null;
+            return resolve()
+          });
+          vNode.context.$on('error', function (err) {
+            return reject(err)
+          });
+        })
+      }
+    });
+  }
+  myEvent = cache[hashText];
+  if (!myEvent[binding.arg]) {
+    throw new Error(`no such ${binding.arg} evnet type`)
+  }
+  if (typeof binding.value === 'function') {
+    myEvent[binding.arg](binding.value);
+  }else if(typeof binding.value === 'object' && binding.value && Reflect.has(binding.value, 'startHandle') && Reflect.has(binding.value, 'endHandle') && typeof binding.value.startHandle === 'function' && typeof binding.value.endHandle === 'function' && binding.arg === 'longTap') {
+      myEvent[binding.arg](binding.value.startHandle, binding.value.endHandle);
+  } else {
+    throw new TypeError(`expression must be function or a object, object has 'startHandle' and 'endHandle' function`)
+  }
+}
+const vuePhoneEvent = {
+  install(Vue){
+    Vue.directive('event', {
+      inserted
+    });
+  }
+};
+
+export default vuePhoneEvent;
+export { inserted };
