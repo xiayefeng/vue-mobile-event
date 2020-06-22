@@ -2,7 +2,7 @@ import { Subject, Observer } from './observer'
 export default class MyEvent extends Subject {
   constructor (props) {
     super(props)
-    this.tapTime = props.tapTime || 80
+    this.tapTime = props.tapTime || 100
     this.logTapTime = props.logTapTime || 400
     this.desX = props.desX || 30
     this.desY = props.desY || 30
