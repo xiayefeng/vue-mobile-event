@@ -5,7 +5,7 @@ export function inserted (el, binding, vNode) {
   let myEvent
   let hashText = strHash(domToString(el))
   if (!cache[hashText]) {
-    cache[hashText] = new MyEvent({
+    const props = {
       select: el,
       destory () {
         return new Promise((resolve, reject) => {
@@ -20,7 +20,9 @@ export function inserted (el, binding, vNode) {
           })
         })
       }
-    })
+    }
+   
+    cache[hashText] = new MyEvent(props)
   }
   myEvent = cache[hashText]
   if (!myEvent[binding.arg]) {
