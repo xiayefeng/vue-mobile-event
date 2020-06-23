@@ -41,14 +41,16 @@ class MyEvent extends Subject {
     this.logTapTime = props.logTapTime || 400;
     this.desX = props.desX || 30;
     this.desY = props.desY || 30;
+    this.originMin = props.originMin || 10;
     this.minMoveDes = props.minMoveDes || 50;
     let select = props.select;
     if (typeof select === 'string') {
       this.ele = document.querySelector(select);
     } else if (select instanceof HTMLElement && select.nodeType === 1) {
       this.ele = select;
-    } else {
-      throw new TypeError('props of select must be string or HTMLElement')
+    }
+    if(!this.ele){
+      console.error('props of select must be already exist DOM select or HTMLElement');
     }
     this.tapLastTime = null;
     if (props.destory && typeof props.destory === 'function') {
@@ -60,17 +62,21 @@ class MyEvent extends Subject {
     }
   }
   tap (handler) {
-    let startTime, endTime;
+    let startTime, endTime, startX, endX, startY, endY;
     let that = this;
     let touchFn = function (e) {
       e.preventDefault();
       switch (e.type) {
         case 'touchstart':
           startTime = new Date().getTime();
+          startX = e.changedTouches[0].clientX;
+          startY = e.changedTouches[0].clientY;
           break
         case 'touchend':
           endTime = new Date().getTime();
-          if (endTime - startTime < that.tapTime) {
+          endX = e.changedTouches[0].clientX;
+          endY = e.changedTouches[0].clientY;
+          if (endTime - startTime <= that.tapTime && Math.abs(startX-endX) < that.originMin && Math.abs(startY - endY) < that.originMin) {
             if (!that.tapLastTime || endTime - that.tapLastTime > 600) { // 防止重复提交
               that.tapLastTime = +new Date();
               handler.call(this, e);
@@ -92,12 +98,14 @@ class MyEvent extends Subject {
   }
 
   longTap (startHandle, endHandle) {
-    let startTime, endTime, timerId, startX, startY, endY;
+    let startTime, endTime, timerId, startX, endX, startY, endY;
     let isLongPress = false;
     let that = this;
     let touchFn = function (e) {
       e.preventDefault();
-      let isMove = Math.abs(e.changedTouches[0].clientX - startX) > that.desX || Math.abs(e.changedTouches[0].clientY - startY) > that.desY;
+      let isMove = function() {
+          return Math.abs(e.changedTouches[0].clientX - startX) > that.desX || Math.abs(e.changedTouches[0].clientY - startY) > that.desY
+      }; 
       switch (e.type) {
         case 'touchstart':
           startTime = new Date().getTime();
@@ -110,9 +118,9 @@ class MyEvent extends Subject {
           }, that.logTapTime);
           break
         case 'touchmove':
-          
           startTime = new Date().getTime();
-          if (isMove && !isLongPress) {
+          
+          if (isMove() && !isLongPress) {
             timerId && clearTimeout(timerId);
             timerId = setTimeout(() => {
               startHandle.call(this, e);
@@ -123,11 +131,12 @@ class MyEvent extends Subject {
           break
         case 'touchend':
           endTime = new Date().getTime();
+          endX = e.changedTouches[0].clientX;
           endY = e.changedTouches[0].clientY;
           // console.log(endY, startY)
           if (endTime - startTime < that.logTapTime) {
             timerId && clearTimeout(timerId);
-          } else if (endHandle && (startY - endY < that.desY)) {
+          } else if (endHandle && (Math.abs(startY - endY) < that.desY) && (Math.abs(startX - endX) < that.desX)) {
             endHandle.call(this, e);
           }
           // clearTimeout(timerId)
