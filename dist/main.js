@@ -37,7 +37,7 @@ class Observer {
 class MyEvent extends Subject {
   constructor (props) {
     super(props);
-    this.tapTime = props.tapTime || 100;
+    this.tapTime = props.tapTime || 150;
     this.logTapTime = props.logTapTime || 400;
     this.desX = props.desX || 30;
     this.desY = props.desY || 30;
@@ -304,7 +304,7 @@ function inserted (el, binding, vNode) {
   let myEvent;
   let hashText = strHash(domToString(el));
   if (!cache[hashText]) {
-    cache[hashText] = new MyEvent({
+    const props = {
       select: el,
       destory () {
         return new Promise((resolve, reject) => {
@@ -319,7 +319,9 @@ function inserted (el, binding, vNode) {
           });
         })
       }
-    });
+    };
+   
+    cache[hashText] = new MyEvent(props);
   }
   myEvent = cache[hashText];
   if (!myEvent[binding.arg]) {
