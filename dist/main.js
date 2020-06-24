@@ -140,9 +140,12 @@ class MyEvent extends Subject {
             endHandle.call(this, e);
           }
           // clearTimeout(timerId)
+          isLongPress = false;
           break
         default:
-          clearTimeout(timerId);
+          endHandle && endHandle.call(this, e);
+          timerId && clearTimeout(timerId);
+          isLongPress = false;
           break
       }
     };
