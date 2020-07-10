@@ -8,7 +8,8 @@
     "build": "rollup -c --environment NODE_ENV:production",
     "lint": "eslint src/**",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w -r 0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "rd /q/s dist && npm run build"
   },
   "repository": {
     "type": "git",
