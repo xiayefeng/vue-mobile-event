@@ -29,7 +29,7 @@ export default class MyEvent extends Subject {
   tap (handler) {
     let startTime, endTime, startX, endX, startY, endY
     let that = this
-    let touchFn = function (e) {
+    let touchFn = function (e, ...args) {
       e.preventDefault()
       switch (e.type) {
         case 'touchstart':
@@ -44,7 +44,7 @@ export default class MyEvent extends Subject {
           if (endTime - startTime <= that.tapTime && Math.abs(startX-endX) < that.originMin && Math.abs(startY - endY) < that.originMin) {
             if (!that.tapLastTime || endTime - that.tapLastTime > 600) { // 防止重复提交
               that.tapLastTime = +new Date()
-              handler.call(this, e)
+              handler.call(this, e, ...args)
             }
           }
           break
@@ -66,7 +66,7 @@ export default class MyEvent extends Subject {
     let startTime, endTime, timerId, startX, endX, startY, endY
     let isLongPress = false
     let that = this
-    let touchFn = function (e) {
+    let touchFn = function (e, ...args) {
       e.preventDefault()
       let isMove = function() {
           return Math.abs(e.changedTouches[0].clientX - startX) > that.desX || Math.abs(e.changedTouches[0].clientY - startY) > that.desY
@@ -77,7 +77,7 @@ export default class MyEvent extends Subject {
           startX = e.changedTouches[0].clientX
           startY = e.changedTouches[0].clientY
           timerId = setTimeout(() => {
-            startHandle.call(this, e)
+            startHandle.call(this, e, args)
             isLongPress = true
             timerId = null
           }, that.logTapTime)
@@ -88,7 +88,7 @@ export default class MyEvent extends Subject {
           if (isMove() && !isLongPress) {
             timerId && clearTimeout(timerId)
             timerId = setTimeout(() => {
-              startHandle.call(this, e)
+              startHandle.call(this, e, ...args)
               isLongPress = true
               timerId = null
             }, that.logTapTime)
@@ -102,13 +102,13 @@ export default class MyEvent extends Subject {
           if (endTime - startTime < that.logTapTime) {
             timerId && clearTimeout(timerId)
           } else if (endHandle && (Math.abs(startY - endY) < that.desY) && (Math.abs(startX - endX) < that.desX)) {
-            endHandle.call(this, e)
+            endHandle.call(this, e, ...args)
           }
           // clearTimeout(timerId)
           isLongPress = false
           break
         default:
-          endHandle && endHandle.call(this, e)
+          endHandle && endHandle.call(this, e, ...args)
           timerId && clearTimeout(timerId)
           isLongPress = false
           break
@@ -129,7 +129,7 @@ export default class MyEvent extends Subject {
   leftSlip (handler) {
     let startX, startY, endX, endY
     let that = this
-    let touchFn = function (e) {
+    let touchFn = function (e, ...args) {
       // console.log(e.type)
       e.preventDefault()
       switch (e.type) {
@@ -141,7 +141,7 @@ export default class MyEvent extends Subject {
           endX = e.changedTouches[0].clientX
           endY = e.changedTouches[0].clientY
           if (Math.abs(startY - endY) < that.desY && startX - endX > that.minMoveDes) {
-            handler.call(this, e)
+            handler.call(this, e, ...args)
           }
           break
         default:
@@ -161,7 +161,7 @@ export default class MyEvent extends Subject {
   rightSlip (handler) {
     let startX, startY, endX, endY
     let that = this
-    let touchFn = function (e) {
+    let touchFn = function (e, ...args) {
       e.preventDefault()
       switch (e.type) {
         case 'touchstart':
@@ -172,7 +172,7 @@ export default class MyEvent extends Subject {
           endX = e.changedTouches[0].clientX
           endY = e.changedTouches[0].clientY
           if (Math.abs(startY - endY) < that.desY && endX - startX > that.minMoveDes) {
-            handler.call(this, e)
+            handler.call(this, e, ...args)
           }
           break
         default:
@@ -192,7 +192,7 @@ export default class MyEvent extends Subject {
   upSlip (handler) {
     let startX, startY, endX, endY
     let that = this
-    let touchFn = function (e) {
+    let touchFn = function (e, ...args) {
       // console.log(e.type)
       e.preventDefault()
       switch (e.type) {
@@ -206,7 +206,7 @@ export default class MyEvent extends Subject {
           /* console.log('X:' + Math.abs(startX - endX))
           console.log('Y:' + (startY - endY)) */
           if ((Math.abs(startX - endX) < that.desX && startY - endY > that.minMoveDes)) {
-            handler.call(this, e)
+            handler.call(this, e, ...args)
           }
           break
         default:
@@ -225,7 +225,7 @@ export default class MyEvent extends Subject {
   downSlip (handler) {
     let startX, startY, endX, endY
     let that = this
-    let touchFn = function (e) {
+    let touchFn = function (e, ...args) {
       // console.log(e.type)
       e.preventDefault()
       switch (e.type) {
@@ -239,7 +239,7 @@ export default class MyEvent extends Subject {
           // console.log('X:' + Math.abs(startX - endX))
           // console.log('Y:' + (endY - startY))
           if (Math.abs(startX - endX) < that.desX && endY - startY > that.minMoveDes) {
-            handler.call(this, e)
+            handler.call(this, e, ...args)
           }
           break
         default:
